@@ -29,6 +29,10 @@ export default class Home extends Component {
           title="Class Timetable"
           onPress={()=> this.props.navigation.navigate('Timetable')}
         />
+        <Button
+          title="Toggle drawer"
+          onPress={()=> this.props.navigation.toggleDrawer()}
+        />
       </View>
     )
   }
