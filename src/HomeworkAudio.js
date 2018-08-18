@@ -10,13 +10,13 @@ export default class Homework extends Component {
   }
 
   static navigationOptions ={
-    title: 'Documents',
+    title: 'Audio',
   };
 
   render(){
     return(
       <View style={styles.container}>
-        <Text>List of homework documents here</Text>
+        <Text>List of homework audio here</Text>
       </View>
     )
   }
