@@ -20,8 +20,12 @@ export default class ToDo extends Component {
     title: 'To Do List',
   };
 
-  completeItem(key){
-
+  toggleItemStatus(key, done){
+        console.log(key, done);
+    let tempTodo = [...this.state.todoObject];
+    let index  =tempTodo.findIndex(el => el.key === key);
+    tempTodo[index].done = !done;
+    this.setState({todoObject:tempTodo}, ()=>{console.log(this.state.todoObject);this.saveList();this.render()});
   }
 
   componentWillMount(){
@@ -29,6 +33,10 @@ export default class ToDo extends Component {
       AsyncStorage.getItem('@MyTodo:todo', (error, todo) =>{
         this.setState({todoObject:JSON.parse(todo)});
       })
+  }
+
+  saveList(){
+    AsyncStorage.setItem('@MyTodo:todo', JSON.stringify(this.state.todoObject));
   }
 
   addToDoItem(){
@@ -43,7 +51,7 @@ export default class ToDo extends Component {
     this.setState(
       {todoObject:this.state.todoObject.concat(
         [{key:maxKey+1, value:this.state.newTodoItem,done:false}]
-      )},()=>{AsyncStorage.setItem('@MyTodo:todo', JSON.stringify(this.state.todoObject))}
+      )},()=>{this.saveList()}
     );
     this.setState({newTodoItem:''});
 
@@ -51,6 +59,7 @@ export default class ToDo extends Component {
   }
 
   render(){
+    console.log('render:',this.state.todoObject)
     return(
       <Container>
         <Content>
@@ -74,9 +83,11 @@ export default class ToDo extends Component {
              <ListItem>
                <Body>
                  <Text>{item.value}</Text>
+                 <Text>{item.done.toString()}</Text>
               </Body>
               <Right>
-                <CheckBox checked={item.done}/>
+                <CheckBox checked={item.done}
+                onPress={()=>this.toggleItemStatus(item.key, item.done)}/>
               </Right>
              </ListItem>
            }>
